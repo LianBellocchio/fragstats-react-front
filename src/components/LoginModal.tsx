@@ -1,0 +1,64 @@
+import React, { useState } from 'react';
+
+interface LoginModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onLogin: (email: string, password: string) => void;
+}
+
+const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onLogin(email, password);
+    // Clear form fields
+    setEmail('');
+    setPassword('');
+    onClose(); // Close modal after submission
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg max-w-md w-full relative">
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+        <h2 className="text-3xl font-bold text-center mb-6 text-yellow-500">Iniciar sesión</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="email-login" className="block text-lg font-medium text-gray-300 mb-1">Correo</label>
+            <input
+              type="email"
+              id="email-login"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="password-login" className="block text-lg font-medium text-gray-300 mb-1">Contraseña</label>
+            <input
+              type="password"
+              id="password-login"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+          >
+            Iniciar sesión
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default LoginModal;
